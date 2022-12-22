@@ -1,31 +1,49 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View, Image } from "react-native";
+import React from "react";
+//import users from "../assets/data/users.json";
+import CustomButton from "../components/CustomButton/CustomButton";
+import { useUserData, useSignOut } from "@nhost/react";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+const TabTwoScreen = () => {
+  const user = useUserData();
+  //console.log(JSON.stringify(user, null, 2))
+  const { signOut } = useSignOut();
 
-export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <Image source={{ uri: user?.avatarUrl }} style={styles.image} />
+      <Text style={styles.name}>{user?.displayName}</Text>
+      <View style={{ marginTop: "auto" }}>
+        <CustomButton
+          onPress={signOut}
+          text="Sign Out"
+          type="TERTIARY"
+          fgColor="crimson"
+        />
+      </View>
     </View>
   );
-}
+};
+
+export default TabTwoScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 20,
+    alignItems: "center",
   },
-  title: {
+  image: {
+    width: 100,
+    aspectRatio: 1,
+    borderRadius: 50,
+    marginTop: 10,
+  },
+  name: {
     fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    letterSpacing: 5,
+    fontWeight: "bold",
+    color: "gray",
+    marginVertical: 15,
   },
 });
